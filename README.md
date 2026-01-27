@@ -2,7 +2,9 @@
 
 ![badge](https://img.shields.io/badge/license-MIT-blue)
 
-A Discord.js bot to handle student verification and other operations in the LMUCS community.
+A Discord.js bot to handle student verification and other operations in the LMUCS community. Originally developed
+by Aidan Srouji and currently maintained by Danny Divinsky and Joseph Muhl.
+For any questions or problems, create a GitHub issue or ask about it in the Discord server.
 
 ## Dependencies
 
