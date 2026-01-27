@@ -11,7 +11,7 @@ function requiredEnvVar(env: string, error?: string) {
 
 const configuration = deepFreeze({
   token: requiredEnvVar("BOT_TOKEN"),
-  client_id: getIdFromToken(requiredEnvVar("BOT_TOKEN")),
+  client_id: process.env.CLIENT_ID ?? getIdFromToken(requiredEnvVar("BOT_TOKEN")),
 
   roles: {
     student: requiredEnvVar("STUDENT_ROLE_ID"),
@@ -23,6 +23,6 @@ const configuration = deepFreeze({
     github_feed: requiredEnvVar("GITHUB_FEED_CHANNEL_ID"),
   },
 
-  calendar_urls: tryDefault("CALENDAR_URLS", (value) => value.split(","), [requiredEnvVar("CLASS_1010_URL")]),
+  calendar_urls: tryDefault("CALENDAR_URLS", (value) => value.split(","), [process.env.CLASS_1010_URL]),
 });
 export default configuration;
