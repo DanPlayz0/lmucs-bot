@@ -30,6 +30,10 @@ const commandFiles = fs.readdirSync(commandsPath).filter((file) => file.endsWith
 for (const file of commandFiles) {
   const commandPath = path.join(commandsPath, file);
   const command: Command = (await import(pathToFileURL(commandPath).href)).default;
+  if (!command) {
+    console.warn(`The command at ${commandPath} is missing a default export.`);
+    continue;
+  }
   client.commands.set(command.data.name, command);
 }
 

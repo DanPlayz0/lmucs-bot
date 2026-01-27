@@ -6,6 +6,7 @@ const event = createEvent({
   once: true,
   execute: async (client) => {
     console.log(`Logged in as ${client.user?.tag}`);
+    console.log(`Connected to ${client.guilds.cache.size} guilds.`);
   },
 });
 
