@@ -1,7 +1,7 @@
-import deepFreeze from "./utils/deepFreeze";
+import deepFreeze from "./utils/deepFreeze.js";
 import "dotenv/config";
-import getIdFromToken from "./utils/getIdFromToken";
-import tryDefault from "./utils/tryDefault";
+import getIdFromToken from "./utils/getIdFromToken.js";
+import tryDefault from "./utils/tryDefault.js";
 
 function requiredEnvVar(env: string, error?: string) {
   const variable = process.env[env] ?? undefined;
