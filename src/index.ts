@@ -25,7 +25,7 @@ const client = new BotClient({
 });
 
 const commandsPath = path.join(__dirname, "commands");
-const commandFiles = fs.readdirSync(commandsPath).filter((file) => file.endsWith(".ts"));
+const commandFiles = fs.readdirSync(commandsPath).filter((file) => /.(t|j)s$/.test(file));
 
 for (const file of commandFiles) {
   const commandPath = path.join(commandsPath, file);
@@ -34,15 +34,21 @@ for (const file of commandFiles) {
     console.warn(`The command at ${commandPath} is missing a default export.`);
     continue;
   }
+  console.debug(`Registering command: ${command.data.name}`);
   client.commands.set(command.data.name, command);
 }
 
 const eventsPath = path.join(__dirname, "events");
-const eventFiles = fs.readdirSync(eventsPath).filter((file) => file.endsWith(".ts"));
+const eventFiles = fs.readdirSync(eventsPath).filter((file) => /.(t|j)s$/.test(file));
 
 for (const file of eventFiles) {
   const filePath = path.join(eventsPath, file);
   const event = (await import(pathToFileURL(filePath).href)).default;
+  if (!event) {
+    console.warn(`The event at ${filePath} is missing a default export.`);
+    continue;
+  }
+  console.debug(`Registering event: ${event.name}`);
   if (event.once) {
     client.once(event.name, (...args) => event.execute(...args));
   } else {
@@ -50,4 +56,5 @@ for (const file of eventFiles) {
   }
 }
 
+if (configuration.debug) client.on("debug", (msg) => console.debug(msg));
 client.login(configuration.token);

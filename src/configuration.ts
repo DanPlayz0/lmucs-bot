@@ -12,6 +12,7 @@ function requiredEnvVar(env: string, error?: string) {
 const configuration = deepFreeze({
   token: requiredEnvVar("BOT_TOKEN"),
   client_id: process.env.CLIENT_ID ?? getIdFromToken(requiredEnvVar("BOT_TOKEN")),
+  debug: tryDefault("DEBUG_MODE", (value) => value.toLowerCase() == "true", false),
 
   roles: {
     student: requiredEnvVar("STUDENT_ROLE_ID"),
