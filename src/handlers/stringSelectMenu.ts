@@ -1,3 +1,4 @@
+import configuration from "@/configuration.js";
 import InteractionHandler from "../types/handler.js";
 import { ActionRowBuilder, EmbedBuilder, ModalBuilder, StringSelectMenuInteraction, TextInputBuilder, TextInputStyle } from "discord.js";
 
@@ -18,12 +19,7 @@ const handler: InteractionHandler<StringSelectMenuInteraction> = {
           ],
           ephemeral: true,
         });
-        const moderatorChannelId = process.env.MOD_CHANNEL_ID;
-        /* istanbul ignore if */
-        if (!moderatorChannelId) {
-          console.error("MOD_CHANNEL_ID not set in .env");
-          return;
-        }
+        const moderatorChannelId = configuration.channels.moderators;
         const moderatorChannel = await interaction.guild?.channels?.fetch(moderatorChannelId);
         /* istanbul ignore else */
         if (moderatorChannel?.isTextBased()) {
@@ -38,7 +34,7 @@ const handler: InteractionHandler<StringSelectMenuInteraction> = {
             ],
           });
         } else {
-          console.error(`MOD_CHANNEL_ID ${moderatorChannelId} is not a valid text channel`);
+          console.error(`MODERATOR_CHANNEL_ID ${moderatorChannelId} is not a valid text channel`);
         }
         return;
       }

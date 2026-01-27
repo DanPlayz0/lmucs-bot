@@ -21,6 +21,7 @@ const configuration = deepFreeze({
   channels: {
     general: requiredEnvVar("GENERAL_CHANNEL_ID"),
     github_feed: requiredEnvVar("GITHUB_FEED_CHANNEL_ID"),
+    moderators: requiredEnvVar("MODERATOR_CHANNEL_ID"),
   },
 
   calendar_urls: tryDefault("CALENDAR_URLS", (value) => value.split(","), [process.env.CLASS_1010_URL]),
