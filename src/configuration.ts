@@ -8,6 +8,9 @@ function requiredEnvVar(env: string, error?: string) {
   if (variable === undefined) throw !error ? `Environment variable ${env} is required but not set.` : error;
   return variable;
 }
+function defaultEnvVar(env: string, defaultValue: string) {
+  return process.env[env] ?? defaultValue;
+}
 
 const configuration = deepFreeze({
   token: requiredEnvVar("BOT_TOKEN"),
@@ -23,6 +26,10 @@ const configuration = deepFreeze({
     general: requiredEnvVar("GENERAL_CHANNEL_ID"),
     github_feed: requiredEnvVar("GITHUB_FEED_CHANNEL_ID"),
     moderators: requiredEnvVar("MODERATOR_CHANNEL_ID"),
+  },
+
+  emojis: {
+    join: defaultEnvVar("JOIN_EMOJI_ID", "1140462588350705815"),
   },
 
   calendar_urls: tryDefault("CALENDAR_URLS", (value) => value.split(","), [process.env.CLASS_1010_URL]),

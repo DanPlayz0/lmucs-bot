@@ -51,7 +51,7 @@ const handler: InteractionHandler<ModalSubmitInteraction> = {
 
       // if the user is a student, send a welcome message to #general
       if (selection === "student") {
-        const generalChannelId = process.env.GENERAL_CHANNEL_ID;
+        const generalChannelId = configuration.channels.general;
         const generalChannel = interaction.guild?.channels.cache.find((channel) => channel.id === generalChannelId);
         /* istanbul ignore if */
         if (!interaction.guild) {
@@ -60,7 +60,7 @@ const handler: InteractionHandler<ModalSubmitInteraction> = {
           console.error(`Could not find general channel with ID ${generalChannelId}`);
         } else {
           const welcomeMessage = WELCOME_MESSAGES[Math.floor(Math.random() * WELCOME_MESSAGES.length)];
-          const joinEmoji = interaction.guild.emojis.cache.find((emoji) => emoji.id === process.env.JOIN_EMOJI_ID || "");
+          const joinEmoji = interaction.guild.emojis.cache.find((emoji) => emoji.id === configuration.emojis.join);
           await generalChannel
             .send({
               content: `${joinEmoji ? `${joinEmoji}  ` : ""}${welcomeMessage.replaceAll("{user}", interaction.user.toString())}`,
@@ -79,10 +79,10 @@ const handler: InteractionHandler<ModalSubmitInteraction> = {
 
       const repoLink = `https://github.com/${username}/${repoName}/settings/hooks`;
 
-      const githubFeedChannel = interaction.guild?.channels.cache.find((channel) => channel.id === process.env.GITHUB_FEED_CHANNEL_ID);
+      const githubFeedChannel = interaction.guild?.channels.cache.find((channel) => channel.id === configuration.channels.github_feed);
 
       if (!githubFeedChannel || !(githubFeedChannel instanceof TextChannel)) {
-        console.error(`Could not find GitHub feed channel with ID ${process.env.GITHUB_FEED_CHANNEL_ID}`);
+        console.error(`Could not find GitHub feed channel with ID ${configuration.channels.github_feed}`);
         interaction.reply({ content: "Failed to create webhook, please try again later.", ephemeral: true });
         return;
       }
