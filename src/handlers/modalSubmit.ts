@@ -1,15 +1,26 @@
 import { EmbedBuilder, GuildMember, GuildMemberRoleManager, ModalSubmitInteraction, TextChannel } from "discord.js";
 import type InteractionHandler from "../types/handler.js";
 import { WELCOME_MESSAGES } from "../utils/constants.js";
+import configuration from "@/configuration.js";
+
+const roleMap = {
+  student: configuration.roles.student,
+  alum: configuration.roles.alumni,
+  guest: configuration.roles.guest,
+};
+
+function isRoleKey(key: string): key is keyof typeof roleMap {
+  return key in roleMap;
+}
 
 const handler: InteractionHandler<ModalSubmitInteraction> = {
   handle: async (client, interaction) => {
     if (interaction.customId.startsWith("onboarding-modal")) {
       // new member finished onboarding!
+      await interaction.deferUpdate();
 
       if (!interaction.member) {
         console.error(`No member found for user ${interaction.member}`);
-        await interaction.deferUpdate();
         return;
       }
 
@@ -19,20 +30,17 @@ const handler: InteractionHandler<ModalSubmitInteraction> = {
         await (interaction.member as GuildMember).setNickname(fullName);
       } catch (error) {
         console.error(`Insufficient permissions to change nickname for ${interaction.user.username}`);
-      } finally {
-        await interaction.deferUpdate();
       }
 
       // assign appropriate role to user
-      const selection = interaction.customId.split("-")[2] as "student" | "alum" | "guest";
-      const roleMap = {
-        student: process.env.STUDENT_ROLE_ID,
-        alum: process.env.ALUMNI_ROLE_ID,
-        guest: process.env.GUEST_ROLE_ID,
-      };
+      const selection = interaction.customId.split("-")[2];
+      if (!isRoleKey(selection)) {
+        console.error(`Invalid role selection ${selection} for user ${interaction.member}`);
+        return;
+      }
       const role = interaction.guild?.roles.cache.find((role) => role.id === roleMap[selection]);
       if (!role) {
-        console.error(`Could not find role ${selection} for user ${interaction.member}`);
+        console.error(`Could not find role ${selection} (with id ${roleMap[selection]}) for user ${interaction.member}`);
       } else {
         try {
           await (interaction.member.roles as GuildMemberRoleManager).add(role);
