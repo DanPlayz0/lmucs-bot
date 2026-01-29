@@ -1,6 +1,12 @@
 import configuration from "@/configuration.js";
 import InteractionHandler from "../types/handler.js";
-import { ActionRowBuilder, EmbedBuilder, ModalBuilder, StringSelectMenuInteraction, TextInputBuilder, TextInputStyle } from "discord.js";
+import {
+  APIModalInteractionResponseCallbackData,
+  ComponentType,
+  EmbedBuilder,
+  StringSelectMenuInteraction,
+  TextInputStyle,
+} from "discord.js";
 
 const handler: InteractionHandler<StringSelectMenuInteraction> = {
   handle: async (client, interaction) => {
@@ -39,17 +45,26 @@ const handler: InteractionHandler<StringSelectMenuInteraction> = {
         return;
       }
 
-      const modal = new ModalBuilder().setCustomId(`onboarding-modal-${selection}`).setTitle(`Welcome ${interaction.user.username}!`);
-
-      const fullNameInput = new TextInputBuilder()
-        .setCustomId("onboarding-prompt-full-name")
-        .setLabel(`What is your full name?`)
-        .setPlaceholder("First Last")
-        .setStyle(TextInputStyle.Short)
-        .setRequired(true)
-        .setMaxLength(100);
-
-      modal.addComponents(new ActionRowBuilder<TextInputBuilder>().addComponents(fullNameInput));
+      const modal: APIModalInteractionResponseCallbackData = {
+        custom_id: `onboarding-modal-${selection}`,
+        title: `Welcome ${interaction.user.username}!`,
+        components: [
+          {
+            type: 1,
+            components: [
+              {
+                type: ComponentType.TextInput,
+                custom_id: "onboarding-prompt-full-name",
+                style: TextInputStyle.Short,
+                label: "What is your full name?",
+                placeholder: "First Last",
+                required: true,
+                max_length: 32, // Discord limits nicknames to 32 characters
+              },
+            ],
+          },
+        ],
+      };
 
       await interaction.showModal(modal);
     } else {

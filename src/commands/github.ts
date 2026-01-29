@@ -1,9 +1,8 @@
 import {
-  ActionRowBuilder,
-  ModalBuilder,
+  APIModalInteractionResponseCallbackData,
+  ComponentType,
   SlashCommandBuilder,
   SlashCommandSubcommandBuilder,
-  TextInputBuilder,
   TextInputStyle,
 } from "discord.js";
 import Command from "../types/command.js";
@@ -15,26 +14,38 @@ const command: Command = {
     .addSubcommand(new SlashCommandSubcommandBuilder().setName("add").setDescription("Add a GitHub repo to the feed")),
 
   execute: async (client, interaction) => {
-    const modal = new ModalBuilder().setTitle("GitHub Feed").setCustomId("github-feed");
-
-    modal.addComponents(
-      new ActionRowBuilder<TextInputBuilder>().addComponents(
-        new TextInputBuilder()
-          .setCustomId("github-username")
-          .setLabel("GitHub Username")
-          .setPlaceholder("asrouji")
-          .setStyle(TextInputStyle.Short)
-          .setRequired(true),
-      ),
-      new ActionRowBuilder<TextInputBuilder>().addComponents(
-        new TextInputBuilder()
-          .setCustomId("github-reponame")
-          .setLabel("GitHub Repo Name")
-          .setPlaceholder("lmucs-discord")
-          .setStyle(TextInputStyle.Short)
-          .setRequired(true),
-      ),
-    );
+    const modal: APIModalInteractionResponseCallbackData = {
+      custom_id: "github-feed",
+      title: "GitHub Feed",
+      components: [
+        {
+          type: 1,
+          components: [
+            {
+              type: ComponentType.TextInput,
+              style: TextInputStyle.Short,
+              custom_id: "github-username",
+              label: "GitHub Username",
+              placeholder: "asrouji",
+              required: true,
+            },
+          ],
+        },
+        {
+          type: 1,
+          components: [
+            {
+              type: ComponentType.TextInput,
+              style: TextInputStyle.Short,
+              custom_id: "github-reponame",
+              label: "GitHub Repo Name",
+              placeholder: "lmucs-discord",
+              required: true,
+            },
+          ],
+        },
+      ],
+    };
 
     await interaction.showModal(modal);
   },
