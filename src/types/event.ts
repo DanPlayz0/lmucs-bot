@@ -1,3 +1,4 @@
+import BotClient from "@/utils/botClient.js";
 import { ClientEvents } from "discord.js";
 
 /**
@@ -11,7 +12,7 @@ export default interface Event<T extends keyof ClientEvents> {
   /** Whether the event should only be executed once */
   once?: boolean;
   /** The function to execute when the event is emitted */
-  execute: (...args: ClientEvents[T]) => Promise<unknown>;
+  execute: (client: BotClient, ...args: ClientEvents[T]) => Promise<unknown>;
 }
 
 /**

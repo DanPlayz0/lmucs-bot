@@ -1,3 +1,4 @@
+import BotClient from "@/utils/botClient.js";
 import { CommandInteraction, SlashCommandBuilder, SlashCommandSubcommandsOnlyBuilder } from "discord.js";
 
 /**
@@ -7,5 +8,5 @@ export default interface Command {
   /** The command data for Discord to display (use a SlashCommandBuilder!) */
   data: SlashCommandBuilder | Omit<SlashCommandBuilder, "addSubcommand" | "addSubcommandGroup"> | SlashCommandSubcommandsOnlyBuilder;
   /** The function to execute when the command is called */
-  execute: (interaction: CommandInteraction) => Promise<unknown>;
+  execute: (client: BotClient, interaction: CommandInteraction) => Promise<unknown>;
 }

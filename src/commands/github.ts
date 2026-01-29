@@ -14,7 +14,7 @@ const command: Command = {
     .setDescription("GitHub feed commands")
     .addSubcommand(new SlashCommandSubcommandBuilder().setName("add").setDescription("Add a GitHub repo to the feed")),
 
-  execute: async (interaction) => {
+  execute: async (client, interaction) => {
     const modal = new ModalBuilder().setTitle("GitHub Feed").setCustomId("github-feed");
 
     modal.addComponents(

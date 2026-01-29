@@ -7,13 +7,13 @@ import modalSubmitHandler from "../handlers/modalSubmit.js";
 const event = createEvent({
   name: Events.InteractionCreate,
   once: false,
-  execute: async (interaction) => {
+  execute: async (client, interaction) => {
     if (interaction.isChatInputCommand()) {
-      chatInputCommandHandler.handle(interaction);
+      chatInputCommandHandler.handle(client, interaction);
     } else if (interaction.isStringSelectMenu()) {
-      stringSelectMenuHandler.handle(interaction);
+      stringSelectMenuHandler.handle(client, interaction);
     } else if (interaction.isModalSubmit()) {
-      modalSubmitHandler.handle(interaction);
+      modalSubmitHandler.handle(client, interaction);
     } else {
       console.error(`Unknown interaction (type ${interaction.type})`);
     }

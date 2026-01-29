@@ -3,7 +3,7 @@ import InteractionHandler from "../types/handler.js";
 import { ActionRowBuilder, EmbedBuilder, ModalBuilder, StringSelectMenuInteraction, TextInputBuilder, TextInputStyle } from "discord.js";
 
 const handler: InteractionHandler<StringSelectMenuInteraction> = {
-  handle: async (interaction) => {
+  handle: async (client, interaction) => {
     if (interaction.customId === "onboarding-role-select") {
       const selection = interaction.values[0] as "student" | "alum" | "faculty" | "guest";
 

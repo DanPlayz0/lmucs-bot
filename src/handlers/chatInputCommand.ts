@@ -1,11 +1,10 @@
 import { ChatInputCommandInteraction } from "discord.js";
 import type InteractionHandler from "../types/handler.js";
-import BotClient from "../utils/botClient.js";
 
 const handler: InteractionHandler<ChatInputCommandInteraction> = {
-  handle: async (interaction) => {
+  handle: async (client, interaction) => {
     // we cast the client to our custom client to read the slash commands collection
-    const command = (interaction.client as BotClient).commands.get(interaction.commandName);
+    const command = client.commands.get(interaction.commandName);
 
     if (!command) {
       console.error(`Command ${interaction.commandName} not found.`);
@@ -14,7 +13,7 @@ const handler: InteractionHandler<ChatInputCommandInteraction> = {
     }
 
     try {
-      await command.execute(interaction);
+      await command.execute(client, interaction);
     } catch (error) {
       console.error(error);
       await interaction.reply({ content: "There was an error while executing this command!", ephemeral: true });

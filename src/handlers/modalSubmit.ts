@@ -3,7 +3,7 @@ import type InteractionHandler from "../types/handler.js";
 import { WELCOME_MESSAGES } from "../utils/constants.js";
 
 const handler: InteractionHandler<ModalSubmitInteraction> = {
-  handle: async (interaction) => {
+  handle: async (client, interaction) => {
     if (interaction.customId.startsWith("onboarding-modal")) {
       // new member finished onboarding!
 
