@@ -1,8 +1,8 @@
 import { SlashCommandBuilder, SlashCommandSubcommandBuilder } from "discord.js";
-import Command from "../types/command.js";
+import { createCommand } from "@/types/command.js";
 import githubFeed from "@/modals/github-feed.js";
 
-const command: Command = {
+export default createCommand({
   data: new SlashCommandBuilder()
     .setName("github")
     .setDescription("GitHub feed commands")
@@ -11,6 +11,4 @@ const command: Command = {
   execute: async (client, interaction) => {
     await interaction.showModal(githubFeed.data);
   },
-};
-
-export default command;
+});
