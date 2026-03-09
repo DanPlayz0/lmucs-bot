@@ -38,6 +38,20 @@ for (const file of commandFiles) {
   client.commands.set(command.data.name, command);
 }
 
+const modalsPath = path.join(__dirname, "modals");
+const modalFiles = fs.readdirSync(modalsPath).filter((file) => /.(t|j)s$/.test(file));
+
+for (const file of modalFiles) {
+  const modalPath = path.join(modalsPath, file);
+  const modal = (await import(pathToFileURL(modalPath).href)).default;
+  if (!modal) {
+    console.warn(`The modal at ${modalPath} is missing a default export.`);
+    continue;
+  }
+  console.debug(`Registering modal: ${modal.data.name}`);
+  client.modals.set(modal.data.name, modal);
+}
+
 const eventsPath = path.join(__dirname, "events");
 const eventFiles = fs.readdirSync(eventsPath).filter((file) => /.(t|j)s$/.test(file));
 
